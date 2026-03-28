@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de Imágenes — Hidroclic</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0E1117;
+  --surface:  #161B25;
+  --surface2: #1E2535;
+  --surface3: #252D40;
+  --border:   #2A3347;
+  --border2:  #3A4A66;
+  --text:     #E8EDF5;
+  --text2:    #8A99B3;
+  --text3:    #4A5A78;
+  --accent:   #3B7BFF;
+  --accent2:  #1A55CC;
+  --green:    #22C97A;
+  --green-bg: rgba(34,201,122,0.12);
+  --amber:    #F5A623;
+  --amber-bg: rgba(245,166,35,0.12);
+  --red:      #FF5A5A;
+  --red-bg:   rgba(255,90,90,0.12);
+  --purple:   #A78BFA;
+  --purple-bg:rgba(167,139,250,0.12);
+  --teal:     #2DD4BF;
+  --teal-bg:  rgba(45,212,191,0.12);
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --radius: 8px;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* GRID BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(59,123,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,123,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* HEADER */
+header {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  background: rgba(14,17,23,0.95);
+  backdrop-filter: blur(10px);
+  padding: 0 32px;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  gap: 20px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-mark {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 16px; height: 16px; }
+.logo-text {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.logo-text span { color: var(--text2); font-weight: 400; }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+.stat-chip .val { color: var(--text); font-weight: 500; }
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-add:hover { background: var(--accent2); }
+.btn-add svg { width: 14px; height: 14px; }
+
+/* MAIN */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 32px;
+}
+
+/* FILTERS */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.search-wrap svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  color: var(--text3);
+}
+.search-input {
+  width: 100%;
+  height: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 0 12px 0 34px;
+  outline: none;
+  transition: border-color .15s;
+}
+.search-input::placeholder { color: var(--text3); }
+.search-input:focus { border-color: var(--accent); }
+
+select.filter-select {
+  height: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 0 10px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .15s;
+  min-width: 130px;
+}
+select.filter-select:focus { border-color: var(--accent); }
+select.filter-select option { background: var(--surface2); }
+
+.filter-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+/* TABLE */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead tr {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color .15s;
+}
+th:hover { color: var(--text2); }
+th.sorted { color: var(--accent); }
+th .sort-arrow { margin-left: 4px; opacity: 0.5; }
+th.sorted .sort-arrow { opacity: 1; }
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+tbody tr.hidden { display: none; }
+
+td {
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--text2);
+  vertical-align: middle;
+}
+td.name-cell {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  max-width: 280px;
+}
+td.name-cell .fname {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+td.name-cell .fdesc {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* STATUS BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.badge.disponible { background: var(--green-bg); color: var(--green); }
+.badge.disponible::before { background: var(--green); }
+.badge.proceso { background: var(--amber-bg); color: var(--amber); }
+.badge.proceso::before { background: var(--amber); }
+.badge.pendiente { background: var(--surface3); color: var(--text2); }
+.badge.pendiente::before { background: var(--text3); }
+.badge.revision { background: var(--purple-bg); color: var(--purple); }
+.badge.revision::before { background: var(--purple); }
+
+/* TYPE TAGS */
+.type-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.type-tag.ortofoto  { color: var(--teal);   border-color: rgba(45,212,191,0.3);  background: var(--teal-bg); }
+.type-tag.mapa      { color: var(--accent);  border-color: rgba(59,123,255,0.3); background: rgba(59,123,255,0.08); }
+.type-tag.raster    { color: var(--amber);   border-color: rgba(245,166,35,0.3); background: var(--amber-bg); }
+.type-tag.perfil    { color: var(--purple);  border-color: rgba(167,139,250,0.3);background: var(--purple-bg); }
+.type-tag.render    { color: var(--red);     border-color: rgba(255,90,90,0.3);  background: var(--red-bg); }
+.type-tag.otro      { color: var(--text2);   border-color: var(--border2);       background: var(--surface3); }
+
+/* ACTION BUTTONS */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+}
+.action-btn:hover { border-color: var(--accent); color: var(--accent); }
+.action-btn svg { width: 11px; height: 11px; }
+
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text3);
+  font-family: var(--mono);
+  font-size: 13px;
+  display: none;
+}
+.empty.visible { display: block; }
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 540px;
+  padding: 28px;
+  position: relative;
+  animation: modalIn .2s ease;
+}
+@keyframes modalIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px;
+}
+.modal-close:hover { color: var(--text); }
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.form-grid .full { grid-column: 1 / -1; }
+.field label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 5px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px 10px;
+  outline: none;
+  transition: border-color .15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 60px; font-family: var(--sans); font-size: 13px; }
+.field select option { background: var(--surface2); }
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.btn-cancel {
+  padding: 8px 16px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-cancel:hover { border-color: var(--border2); }
+.btn-save {
+  padding: 8px 20px;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-save:hover { background: var(--accent2); }
+
+/* EXPORT */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.toolbar-left {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: var(--mono);
+}
+.toolbar-right { display: flex; gap: 8px; }
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+.btn-ghost svg { width: 12px; height: 12px; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 10px 16px;
+  z-index: 200;
+  transform: translateY(60px);
+  opacity: 0;
+  transition: all .3s ease;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+@media (max-width: 768px) {
+  main { padding: 16px; }
+  header { padding: 0 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .stat-chip { display: none; }
+  th:nth-child(4), td:nth-child(4) { display: none; }
+  th:nth-child(5), td:nth-child(5) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="5" height="5" rx="1" fill="white" opacity="0.9"/>
+          <rect x="9" y="2" width="5" height="5" rx="1" fill="white" opacity="0.6"/>
+          <rect x="2" y="9" width="5" height="5" rx="1" fill="white" opacity="0.6"/>
+          <rect x="9" y="9" width="5" height="5" rx="1" fill="white" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="logo-text">HIDROCLIC <span>/ catálogo de imágenes</span></div>
+    </div>
+    <div class="header-right">
+      <div class="stat-chip">Total <span class="val" id="stat-total">0</span></div>
+      <div class="stat-chip">Disponibles <span class="val" id="stat-disp" style="color:var(--green)">0</span></div>
+      <div class="stat-chip">En proceso <span class="val" id="stat-proc" style="color:var(--amber)">0</span></div>
+      <button class="btn-add" onclick="openModal()">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Nueva imagen
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="filters">
+    <div class="search-wrap">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="6" cy="6" r="4"/><path d="M10 10l2.5 2.5" stroke-linecap="round"/>
+      </svg>
+      <input class="search-input" type="text" id="search" placeholder="Buscar por nombre, proyecto, sector..." oninput="applyFilters()">
+    </div>
+    <select class="filter-select" id="f-proyecto" onchange="applyFilters()">
+      <option value="">Todos los proyectos</option>
+      <option>Tumbes / ANIN</option>
+      <option>EPA</option>
+      <option>Hidroclic interno</option>
+    </select>
+    <select class="filter-select" id="f-tipo" onchange="applyFilters()">
+      <option value="">Todos los tipos</option>
+      <option>Ortofoto</option>
+      <option>Mapa temático</option>
+      <option>Raster hidráulico</option>
+      <option>Perfil</option>
+      <option>Render</option>
+      <option>Otro</option>
+    </select>
+    <select class="filter-select" id="f-estado" onchange="applyFilters()">
+      <option value="">Todos los estados</option>
+      <option>Disponible</option>
+      <option>En proceso</option>
+      <option>En revisión</option>
+      <option>Pendiente</option>
+    </select>
+    <div class="filter-count" id="filter-count"></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-left" id="toolbar-label">— imágenes registradas</div>
+    <div class="toolbar-right">
+      <button class="btn-ghost" onclick="exportCSV()">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 9v1a1 1 0 001 1h8a1 1 0 001-1V9" stroke-linecap="round"/></svg>
+        Exportar CSV
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="main-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)" data-col="0">Nombre del archivo <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(1)" data-col="1">Proyecto <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(2)" data-col="2">Sector <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(3)" data-col="3">Tipo <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(4)" data-col="4">Fecha <span class="sort-arrow">↕</span></th>
+          <th onclick="sortTable(5)" data-col="5">Estado <span class="sort-arrow">↕</span></th>
+          <th>Ruta / Enlace</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="empty" id="empty-state">No se encontraron imágenes con los filtros aplicados.</div>
+  </div>
+</main>
+
+<!-- MODAL NUEVA IMAGEN -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-title-text">Nueva imagen</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="field full">
+        <label>Nombre del archivo *</label>
+        <input type="text" id="f-nombre" placeholder="ortofoto_sector1_rgb.tif">
+      </div>
+      <div class="field">
+        <label>Proyecto *</label>
+        <select id="f-proy">
+          <option value="">Seleccionar...</option>
+          <option>Tumbes / ANIN</option>
+          <option>EPA</option>
+          <option>Hidroclic interno</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sector</label>
+        <input type="text" id="f-sector" placeholder="Sector 1, Sector 6...">
+      </div>
+      <div class="field">
+        <label>Tipo *</label>
+        <select id="f-tipo-modal">
+          <option value="">Seleccionar...</option>
+          <option>Ortofoto</option>
+          <option>Mapa temático</option>
+          <option>Raster hidráulico</option>
+          <option>Perfil</option>
+          <option>Render</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select id="f-estado-modal">
+          <option>Disponible</option>
+          <option>En proceso</option>
+          <option>En revisión</option>
+          <option>Pendiente</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label>Ruta o enlace SharePoint</label>
+        <input type="text" id="f-ruta" placeholder="SharePoint > Tumbes > Imágenes > Sector1 / https://...">
+      </div>
+      <div class="field full">
+        <label>Descripción (opcional)</label>
+        <textarea id="f-desc" placeholder="Ortofoto RGB procesada con Pix4D, resolución 5cm/px..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveImage()">Guardar imagen</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let images = [
+  { id:1, nombre:'ortofoto_sector1_rgb.tif', desc:'Ortofoto RGB procesada con Pix4D, 5cm/px', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Ortofoto', fecha:'2026-03-10', estado:'Disponible', ruta:'SharePoint > Tumbes > Imágenes > Sector1' },
+  { id:2, nombre:'ortofoto_sector6_rgb.tif', desc:'Vuelo drone marzo 2026', proyecto:'Tumbes / ANIN', sector:'Sector 6', tipo:'Ortofoto', fecha:'2026-03-18', estado:'Disponible', ruta:'SharePoint > Tumbes > Imágenes > Sector6' },
+  { id:3, nombre:'raster_profundidad_sector1.tif', desc:'Salida InfoWorks ICM — profundidad máx', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Raster hidráulico', fecha:'2026-03-20', estado:'Disponible', ruta:'SharePoint > Tumbes > Hidráulico > Rasters' },
+  { id:4, nombre:'raster_velocidad_sector6.tif', desc:'Velocidad máxima simulación ICM', proyecto:'Tumbes / ANIN', sector:'Sector 6', tipo:'Raster hidráulico', fecha:'2026-03-22', estado:'En proceso', ruta:'SharePoint > Tumbes > Hidráulico > Rasters' },
+  { id:5, nombre:'mapa_cobertura_suelo_tumbes.png', desc:'Clasificación supervisada Sentinel-2', proyecto:'Tumbes / ANIN', sector:'General', tipo:'Mapa temático', fecha:'2026-02-28', estado:'Disponible', ruta:'SharePoint > Tumbes > Mapas > Temáticos' },
+  { id:6, nombre:'perfil_estratigrafico_S1-C3.png', desc:'Calicata 3, Sector 1', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Perfil', fecha:'2026-03-05', estado:'Disponible', ruta:'SharePoint > Tumbes > Geotécnico > Perfiles' },
+  { id:7, nombre:'ortofoto_sector1_termal.tif', desc:'Banda térmica vuelo complementario', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Ortofoto', fecha:'2026-03-25', estado:'En revisión', ruta:'SharePoint > Tumbes > Imágenes > Sector1' },
+  { id:8, nombre:'render_3d_drenaje_tumbes.png', desc:'Navisworks render red de drenaje', proyecto:'Tumbes / ANIN', sector:'General', tipo:'Render', fecha:'2026-03-15', estado:'Disponible', ruta:'SharePoint > Tumbes > BIM > Renders' },
+  { id:9, nombre:'mapa_pendientes_cuenca.png', desc:'Slope map QGIS — cuenca Tumbes', proyecto:'Tumbes / ANIN', sector:'General', tipo:'Mapa temático', fecha:'2026-03-12', estado:'Disponible', ruta:'SharePoint > Tumbes > Mapas > Temáticos' },
+  { id:10, nombre:'banner_curso_qgis_epa.png', desc:'Material promocional curso QGIS', proyecto:'EPA', sector:'—', tipo:'Otro', fecha:'2026-03-01', estado:'Disponible', ruta:'SharePoint > EPA > Marketing' },
+];
+
+let sortCol = 4;
+let sortDir = -1;
+let editId = null;
+
+const typeClass = {
+  'Ortofoto':'ortofoto','Mapa temático':'mapa','Raster hidráulico':'raster',
+  'Perfil':'perfil','Render':'render','Otro':'otro'
+};
+const estadoClass = {
+  'Disponible':'disponible','En proceso':'proceso',
+  'En revisión':'revision','Pendiente':'pendiente'
+};
+const estadoLabel = {
+  'Disponible':'Disponible','En proceso':'En proceso',
+  'En revisión':'En revisión','Pendiente':'Pendiente'
+};
+
+function render(data) {
+  const tbody = document.getElementById('table-body');
+  const empty = document.getElementById('empty-state');
+  tbody.innerHTML = '';
+  if (data.length === 0) { empty.classList.add('visible'); }
+  else { empty.classList.remove('visible'); }
+
+  data.forEach(img => {
+    const tr = document.createElement('tr');
+    const isUrl = img.ruta && (img.ruta.startsWith('http://') || img.ruta.startsWith('https://'));
+    const rutaHtml = isUrl
+      ? `<a class="action-btn" href="${img.ruta}" target="_blank"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 2H2a1 1 0 00-1 1v6a1 1 0 001 1h6a1 1 0 001-1V6.5M7 1h3m0 0v3m0-3L5 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Abrir</a>`
+      : `<span style="font-family:var(--mono);font-size:11px;color:var(--text3);max-width:160px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${img.ruta}">${img.ruta||'—'}</span>`;
+
+    tr.innerHTML = `
+      <td class="name-cell">
+        <span class="fname">${img.nombre}</span>
+        ${img.desc ? `<span class="fdesc">${img.desc}</span>` : ''}
+      </td>
+      <td>${img.proyecto}</td>
+      <td style="color:var(--text3);font-size:12px;">${img.sector||'—'}</td>
+      <td><span class="type-tag ${typeClass[img.tipo]||'otro'}">${img.tipo}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text3);">${formatDate(img.fecha)}</td>
+      <td><span class="badge ${estadoClass[img.estado]||'pendiente'}">${estadoLabel[img.estado]||img.estado}</span></td>
+      <td>${rutaHtml}</td>
+      <td>
+        <div style="display:flex;gap:5px;">
+          <button class="action-btn" onclick="editImage(${img.id})">
+            <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="action-btn" onclick="deleteImage(${img.id})" style="color:var(--red);border-color:rgba(255,90,90,0.2);">
+            <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h7M4 3V2h3v1M4.5 5v3.5M6.5 5v3.5M3 3l.5 6h4l.5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  updateStats();
+  document.getElementById('toolbar-label').textContent = `${data.length} imagen${data.length!==1?'es':''} registrada${data.length!==1?'s':''}`;
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const proj = document.getElementById('f-proyecto').value;
+  const tipo = document.getElementById('f-tipo').value;
+  const estado = document.getElementById('f-estado').value;
+  let filtered = images.filter(img => {
+    const matchQ = !q || [img.nombre,img.proyecto,img.sector,img.desc,img.ruta].some(v=>(v||'').toLowerCase().includes(q));
+    const matchP = !proj || img.proyecto === proj;
+    const matchT = !tipo || img.tipo === tipo;
+    const matchE = !estado || img.estado === estado;
+    return matchQ && matchP && matchT && matchE;
+  });
+  filtered = sortData(filtered);
+  render(filtered);
+}
+
+function sortData(data) {
+  const cols = ['nombre','proyecto','sector','tipo','fecha','estado'];
+  return [...data].sort((a,b) => {
+    const va = (a[cols[sortCol]]||'').toString();
+    const vb = (b[cols[sortCol]]||'').toString();
+    return va.localeCompare(vb) * sortDir;
+  });
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = 1; }
+  document.querySelectorAll('th').forEach((th,i) => {
+    th.classList.toggle('sorted', i === col);
+    const arr = th.querySelector('.sort-arrow');
+    if (arr) arr.textContent = i === col ? (sortDir === 1 ? '↑' : '↓') : '↕';
+  });
+  applyFilters();
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = images.length;
+  document.getElementById('stat-disp').textContent = images.filter(i=>i.estado==='Disponible').length;
+  document.getElementById('stat-proc').textContent = images.filter(i=>i.estado==='En proceso').length;
+}
+
+function openModal(id) {
+  editId = id || null;
+  const modal = document.getElementById('modal-overlay');
+  document.getElementById('modal-title-text').textContent = id ? 'Editar imagen' : 'Nueva imagen';
+  if (id) {
+    const img = images.find(i=>i.id===id);
+    document.getElementById('f-nombre').value = img.nombre;
+    document.getElementById('f-proy').value = img.proyecto;
+    document.getElementById('f-sector').value = img.sector||'';
+    document.getElementById('f-tipo-modal').value = img.tipo;
+    document.getElementById('f-estado-modal').value = img.estado;
+    document.getElementById('f-ruta').value = img.ruta||'';
+    document.getElementById('f-desc').value = img.desc||'';
+  } else {
+    ['f-nombre','f-sector','f-ruta','f-desc'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-proy').value = '';
+    document.getElementById('f-tipo-modal').value = '';
+    document.getElementById('f-estado-modal').value = 'Disponible';
+  }
+  modal.classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeOnOverlay(e) { if (e.target.id === 'modal-overlay') closeModal(); }
+
+function editImage(id) { openModal(id); }
+
+function deleteImage(id) {
+  if (!confirm('¿Eliminar esta imagen del catálogo?')) return;
+  images = images.filter(i=>i.id!==id);
+  applyFilters();
+  showToast('Imagen eliminada');
+}
+
+function saveImage() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const proyecto = document.getElementById('f-proy').value;
+  const tipo = document.getElementById('f-tipo-modal').value;
+  if (!nombre || !proyecto || !tipo) { alert('Completa los campos obligatorios (*)'); return; }
+  const data = {
+    nombre, proyecto,
+    sector: document.getElementById('f-sector').value.trim()||'—',
+    tipo,
+    estado: document.getElementById('f-estado-modal').value,
+    ruta: document.getElementById('f-ruta').value.trim(),
+    desc: document.getElementById('f-desc').value.trim(),
+    fecha: new Date().toISOString().slice(0,10),
+  };
+  if (editId) {
+    const idx = images.findIndex(i=>i.id===editId);
+    images[idx] = { ...images[idx], ...data };
+    showToast('Imagen actualizada');
+  } else {
+    data.id = Date.now();
+    images.unshift(data);
+    showToast('Imagen agregada al catálogo');
+  }
+  closeModal();
+  applyFilters();
+}
+
+function exportCSV() {
+  const headers = ['Nombre','Proyecto','Sector','Tipo','Fecha','Estado','Ruta','Descripción'];
+  const rows = images.map(i=>[i.nombre,i.proyecto,i.sector,i.tipo,i.fecha,i.estado,i.ruta,i.desc].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `catalogo_imagenes_hidroclic_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  showToast('CSV exportado');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+applyFilters();
+</script>
+</body>
+</html>
