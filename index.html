@@ -525,31 +525,20 @@ td.name-cell .fdesc {
 }
 .ruta-tooltip {
   display: none;
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 0;
+  position: fixed;
   background: var(--text);
   color: var(--surface);
   font-family: var(--mono);
   font-size: 11px;
   padding: 6px 10px;
   border-radius: 6px;
-  white-space: nowrap;
-  z-index: 50;
+  z-index: 9999;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   pointer-events: none;
   max-width: 340px;
   white-space: normal;
   word-break: break-all;
   line-height: 1.5;
-}
-.ruta-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 12px;
-  border: 5px solid transparent;
-  border-top-color: var(--text);
 }
 .ruta-cell:hover .ruta-tooltip { display: block; }
 </style>
@@ -813,6 +802,22 @@ function showToast(msg) {
 
 const style = document.createElement('style');
 style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
+document.head.appendChild(style);
+
+document.addEventListener('mousemove', e => {
+  const cell = e.target.closest('.ruta-cell');
+  if (!cell) return;
+  const tip = cell.querySelector('.ruta-tooltip');
+  if (!tip) return;
+  const x = e.clientX + 12;
+  const y = e.clientY + 16;
+  const tipW = 340;
+  const tipH = 60;
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+  tip.style.left = (x + tipW > winW ? winW - tipW - 8 : x) + 'px';
+  tip.style.top  = (y + tipH > winH ? e.clientY - tipH - 8 : y) + 'px';
+});
 document.head.appendChild(style);
 
 loadFromSheets();
