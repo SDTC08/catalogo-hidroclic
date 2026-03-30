@@ -505,6 +505,53 @@ td.name-cell .fdesc {
   th:nth-child(4), td:nth-child(4) { display: none; }
   th:nth-child(5), td:nth-child(5) { display: none; }
 }
+
+.ruta-cell {
+  position: relative;
+  display: inline-block;
+  max-width: 160px;
+  cursor: default;
+}
+.ruta-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+  border-bottom: 1px dashed var(--border2);
+}
+.ruta-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  background: var(--text);
+  color: var(--surface);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 50;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  pointer-events: none;
+  max-width: 340px;
+  white-space: normal;
+  word-break: break-all;
+  line-height: 1.5;
+}
+.ruta-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 12px;
+  border: 5px solid transparent;
+  border-top-color: var(--text);
+}
+.ruta-cell:hover .ruta-tooltip { display: block; }
 </style>
 </head>
 <body>
@@ -676,7 +723,10 @@ function render(data) {
     const isUrl = img.ruta && (img.ruta.startsWith('http://') || img.ruta.startsWith('https://'));
     const rutaHtml = isUrl
       ? `<a class="action-btn" href="${img.ruta}" target="_blank"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 2H2a1 1 0 00-1 1v6a1 1 0 001 1h6a1 1 0 001-1V6.5M7 1h3m0 0v3m0-3L5 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Abrir</a>`
-      : `<span style="font-family:var(--mono);font-size:11px;color:var(--text3);max-width:160px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${img.ruta||''}">${img.ruta||'—'}</span>`;
+      : `<span class="ruta-cell" data-ruta="${img.ruta||''}">
+          <span class="ruta-text">${img.ruta||'—'}</span>
+          <span class="ruta-tooltip">${img.ruta||'—'}</span>
+        </span>`;
     tr.innerHTML = `
       <td class="name-cell">
         <span class="fname">${img.nombre}</span>
