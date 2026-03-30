@@ -9,27 +9,27 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #0E1117;
-  --surface:  #161B25;
-  --surface2: #1E2535;
-  --surface3: #252D40;
-  --border:   #2A3347;
-  --border2:  #3A4A66;
-  --text:     #E8EDF5;
-  --text2:    #8A99B3;
-  --text3:    #4A5A78;
-  --accent:   #3B7BFF;
-  --accent2:  #1A55CC;
-  --green:    #22C97A;
-  --green-bg: rgba(34,201,122,0.12);
-  --amber:    #F5A623;
-  --amber-bg: rgba(245,166,35,0.12);
-  --red:      #FF5A5A;
-  --red-bg:   rgba(255,90,90,0.12);
-  --purple:   #A78BFA;
-  --purple-bg:rgba(167,139,250,0.12);
-  --teal:     #2DD4BF;
-  --teal-bg:  rgba(45,212,191,0.12);
+  --bg:       #F0F5F2;
+  --surface:  #FFFFFF;
+  --surface2: #E4EEE9;
+  --surface3: #D4E6DC;
+  --border:   #B8D4C4;
+  --border2:  #8FB8A4;
+  --text:     #0D2E1E;
+  --text2:    #2D6B4A;
+  --text3:    #6B9E84;
+  --accent:   #0F4E38;
+  --accent2:  #083324;
+  --green:    #0F8A50;
+  --green-bg: rgba(15,138,80,0.12);
+  --amber:    #B85C00;
+  --amber-bg: rgba(184,92,0,0.12);
+  --red:      #C0392B;
+  --red-bg:   rgba(192,57,43,0.12);
+  --purple:   #5B4A8A;
+  --purple-bg:rgba(91,74,138,0.12);
+  --teal:     #0F6B5A;
+  --teal-bg:  rgba(15,107,90,0.12);
   --mono: 'IBM Plex Mono', monospace;
   --sans: 'IBM Plex Sans', sans-serif;
   --radius: 8px;
@@ -51,8 +51,8 @@ body::before {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(59,123,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59,123,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(15,78,56,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,78,56,0.06) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -63,7 +63,7 @@ header {
   position: relative;
   z-index: 10;
   border-bottom: 1px solid var(--border);
-  background: rgba(14,17,23,0.95);
+  background: rgba(240,245,242,0.97);
   backdrop-filter: blur(10px);
   padding: 0 32px;
 }
@@ -312,7 +312,7 @@ td.name-cell .fdesc {
 .type-tag.mapa      { color: var(--accent);  border-color: rgba(59,123,255,0.3); background: rgba(59,123,255,0.08); }
 .type-tag.raster    { color: var(--amber);   border-color: rgba(245,166,35,0.3); background: var(--amber-bg); }
 .type-tag.perfil    { color: var(--purple);  border-color: rgba(167,139,250,0.3);background: var(--purple-bg); }
-.type-tag.shp    { color: var(--red);     border-color: rgba(255,90,90,0.3);  background: var(--red-bg); }
+.type-tag.render    { color: var(--red);     border-color: rgba(255,90,90,0.3);  background: var(--red-bg); }
 .type-tag.otro      { color: var(--text2);   border-color: var(--border2);       background: var(--surface3); }
 
 /* ACTION BUTTONS */
@@ -526,10 +526,14 @@ td.name-cell .fdesc {
       <div class="stat-chip">Total <span class="val" id="stat-total">0</span></div>
       <div class="stat-chip">Disponibles <span class="val" id="stat-disp" style="color:var(--green)">0</span></div>
       <div class="stat-chip">En proceso <span class="val" id="stat-proc" style="color:var(--amber)">0</span></div>
-      <button class="btn-add" onclick="openModal()">
-        <svg viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Nueva imagen
-      </button>
+      <div class="stat-chip" id="sync-status" style="color:var(--text3);">
+        <svg id="sync-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="width:11px;height:11px"><path d="M1 6a5 5 0 1 0 1.5-3.5" stroke-linecap="round"/><path d="M1 2v2.5h2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="sync-label">Cargando...</span>
+      </div>
+      <a href="https://docs.google.com/spreadsheets/d/1GUS4zfJFm49eqIhbSadM2NjtyU3mn2Ym0aHjx3BVm1w/edit" target="_blank" class="btn-add" style="text-decoration:none;">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M2 2h7l3 3v7H2V2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 2v3h3M5 7h4M5 9.5h4M5 4.5h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Editar en Sheets
+      </a>
     </div>
   </div>
 </header>
@@ -544,18 +548,17 @@ td.name-cell .fdesc {
     </div>
     <select class="filter-select" id="f-proyecto" onchange="applyFilters()">
       <option value="">Todos los proyectos</option>
-      <option>Tumbes / ANIN</option>
-      <option>EPA</option>
-      <option>Hidroclic interno</option>
+      <option>DUT</option>
+      <option>DUJ</option>
+      <option>UMCH</option>
+      <option>META</option>
     </select>
     <select class="filter-select" id="f-tipo" onchange="applyFilters()">
       <option value="">Todos los tipos</option>
-      <option>Ortofoto</option>
-      <option>Mapa temático</option>
-      <option>Raster hidráulico</option>
-      <option>Perfil</option>
-      <option>Render</option>
-      <option>Otro</option>
+      <option>IMG</option>
+      <option>VIDEO</option>
+      <option>GIF</option>
+      <option>PDF</option>
     </select>
     <select class="filter-select" id="f-estado" onchange="applyFilters()">
       <option value="">Todos los estados</option>
@@ -568,8 +571,12 @@ td.name-cell .fdesc {
   </div>
 
   <div class="toolbar">
-    <div class="toolbar-left" id="toolbar-label">— imágenes registradas</div>
+    <div class="toolbar-left" id="toolbar-label">Cargando datos...</div>
     <div class="toolbar-right">
+      <button class="btn-ghost" onclick="loadFromSheets()">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6a5 5 0 1 0 1.5-3.5" stroke-linecap="round"/><path d="M1 2v2.5h2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Recargar
+      </button>
       <button class="btn-ghost" onclick="exportCSV()">
         <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 9v1a1 1 0 001 1h8a1 1 0 001-1V9" stroke-linecap="round"/></svg>
         Exportar CSV
@@ -588,7 +595,6 @@ td.name-cell .fdesc {
           <th onclick="sortTable(4)" data-col="4">Fecha <span class="sort-arrow">↕</span></th>
           <th onclick="sortTable(5)" data-col="5">Estado <span class="sort-arrow">↕</span></th>
           <th>Ruta / Enlace</th>
-          <th></th>
         </tr>
       </thead>
       <tbody id="table-body"></tbody>
@@ -597,146 +603,101 @@ td.name-cell .fdesc {
   </div>
 </main>
 
-<!-- MODAL NUEVA IMAGEN -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-title">
-      <span id="modal-title-text">Nueva imagen</span>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="form-grid">
-      <div class="field full">
-        <label>Nombre del archivo *</label>
-        <input type="text" id="f-nombre" placeholder="ortofoto_sector1_rgb.tif">
-      </div>
-      <div class="field">
-        <label>Proyecto *</label>
-        <select id="f-proy">
-          <option value="">Seleccionar...</option>
-          <option>Tumbes / ANIN</option>
-          <option>EPA</option>
-          <option>Hidroclic interno</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Sector</label>
-        <input type="text" id="f-sector" placeholder="Sector 1, Sector 6...">
-      </div>
-      <div class="field">
-        <label>Tipo *</label>
-        <select id="f-tipo-modal">
-          <option value="">Seleccionar...</option>
-          <option>Ortofoto</option>
-          <option>Mapa temático</option>
-          <option>Raster hidráulico</option>
-          <option>Perfil</option>
-          <option>Render</option>
-          <option>Otro</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Estado</label>
-        <select id="f-estado-modal">
-          <option>Disponible</option>
-          <option>En proceso</option>
-          <option>En revisión</option>
-          <option>Pendiente</option>
-        </select>
-      </div>
-      <div class="field full">
-        <label>Ruta o enlace SharePoint</label>
-        <input type="text" id="f-ruta" placeholder="SharePoint > Tumbes > Imágenes > Sector1 / https://...">
-      </div>
-      <div class="field full">
-        <label>Descripción (opcional)</label>
-        <textarea id="f-desc" placeholder="Ortofoto RGB procesada con Pix4D, resolución 5cm/px..."></textarea>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-save" onclick="saveImage()">Guardar imagen</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-let images = [
-  { id:1, nombre:'ortofoto_sector1_rgb.tif', desc:'Ortofoto RGB procesada con Pix4D, 5cm/px', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Ortofoto', fecha:'2026-03-10', estado:'Disponible', ruta:'SharePoint > Tumbes > Imágenes > Sector1' },
-  { id:2, nombre:'ortofoto_sector6_rgb.tif', desc:'Vuelo drone marzo 2026', proyecto:'Tumbes / ANIN', sector:'Sector 6', tipo:'Ortofoto', fecha:'2026-03-18', estado:'Disponible', ruta:'SharePoint > Tumbes > Imágenes > Sector6' },
-  { id:3, nombre:'raster_profundidad_sector1.tif', desc:'Salida InfoWorks ICM — profundidad máx', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Raster hidráulico', fecha:'2026-03-20', estado:'Disponible', ruta:'SharePoint > Tumbes > Hidráulico > Rasters' },
-  { id:4, nombre:'raster_velocidad_sector6.tif', desc:'Velocidad máxima simulación ICM', proyecto:'Tumbes / ANIN', sector:'Sector 6', tipo:'Raster hidráulico', fecha:'2026-03-22', estado:'En proceso', ruta:'SharePoint > Tumbes > Hidráulico > Rasters' },
-  { id:5, nombre:'mapa_cobertura_suelo_tumbes.png', desc:'Clasificación supervisada Sentinel-2', proyecto:'Tumbes / ANIN', sector:'General', tipo:'Mapa temático', fecha:'2026-02-28', estado:'Disponible', ruta:'SharePoint > Tumbes > Mapas > Temáticos' },
-  { id:6, nombre:'perfil_estratigrafico_S1-C3.png', desc:'Calicata 3, Sector 1', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Perfil', fecha:'2026-03-05', estado:'Disponible', ruta:'SharePoint > Tumbes > Geotécnico > Perfiles' },
-  { id:7, nombre:'ortofoto_sector1_termal.tif', desc:'Banda térmica vuelo complementario', proyecto:'Tumbes / ANIN', sector:'Sector 1', tipo:'Ortofoto', fecha:'2026-03-25', estado:'En revisión', ruta:'SharePoint > Tumbes > Imágenes > Sector1' },
-  { id:8, nombre:'render_3d_drenaje_tumbes.png', desc:'Navisworks render red de drenaje', proyecto:'Tumbes / ANIN', sector:'General', tipo:'Render', fecha:'2026-03-15', estado:'Disponible', ruta:'SharePoint > Tumbes > BIM > Renders' },
-  { id:9, nombre:'mapa_pendientes_cuenca.png', desc:'Slope map QGIS — cuenca Tumbes', proyecto:'Tumbes / ANIN', sector:'General', tipo:'Mapa temático', fecha:'2026-03-12', estado:'Disponible', ruta:'SharePoint > Tumbes > Mapas > Temáticos' },
-  { id:10, nombre:'banner_curso_qgis_epa.png', desc:'Material promocional curso QGIS', proyecto:'EPA', sector:'—', tipo:'Otro', fecha:'2026-03-01', estado:'Disponible', ruta:'SharePoint > EPA > Marketing' },
-];
+const SHEETS_ID = '2PACX-1vSs7J18e3MYj9JZWV4WT_bD9A9QdXZogdjRLB9FHIokxqPeFXuKawsAePWcXqZkt3wsTLXtvuTvgjKu';
+const SHEETS_CSV = `https://docs.google.com/spreadsheets/d/e/${SHEETS_ID}/pub?gid=0&single=true&output=csv`;
+const PROXY = `https://corsproxy.io/?url=${encodeURIComponent(SHEETS_CSV)}`;
 
+let images = [];
 let sortCol = 4;
 let sortDir = -1;
-let editId = null;
 
 const typeClass = {
-  'Ortofoto':'ortofoto','Mapa temático':'mapa','Raster hidráulico':'raster',
-  'Perfil':'perfil','Shp':'shp','Otro':'otro'
+  'IMG':'ortofoto','VIDEO':'mapa','GIF':'raster','PDF':'perfil'
 };
 const estadoClass = {
   'Disponible':'disponible','En proceso':'proceso',
   'En revisión':'revision','Pendiente':'pendiente'
 };
-const estadoLabel = {
-  'Disponible':'Disponible','En proceso':'En proceso',
-  'En revisión':'En revisión','Pendiente':'Pendiente'
-};
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,'').toLowerCase());
+  return lines.slice(1).map((line, idx) => {
+    const vals = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || [];
+    const obj = { id: idx + 1 };
+    headers.forEach((h, i) => {
+      obj[h] = (vals[i] || '').trim().replace(/^"|"$/g, '');
+    });
+    return obj;
+  }).filter(r => r.nombre);
+}
+
+async function loadFromSheets() {
+  const label = document.getElementById('sync-label');
+  const icon = document.getElementById('sync-icon');
+  label.textContent = 'Cargando...';
+  icon.style.animation = 'spin 1s linear infinite';
+  try {
+    let text = '';
+    try {
+      const res = await fetch(PROXY + '&t=' + Date.now());
+      text = await res.text();
+    } catch(e1) {
+      const res2 = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(SHEETS_CSV)}&t=${Date.now()}`);
+      text = await res2.text();
+    }
+    images = parseCSV(text);
+    applyFilters();
+    label.textContent = 'Actualizado';
+    icon.style.animation = '';
+    setTimeout(() => label.textContent = images.length + ' registros', 2000);
+    updateStats();
+  } catch(e) {
+    label.textContent = 'Error al cargar';
+    icon.style.animation = '';
+    document.getElementById('empty-state').textContent = 'No se pudo conectar con Google Sheets. Verifica que la hoja esté publicada como CSV.';
+    document.getElementById('empty-state').classList.add('visible');
+  }
+}
 
 function render(data) {
   const tbody = document.getElementById('table-body');
   const empty = document.getElementById('empty-state');
   tbody.innerHTML = '';
-  if (data.length === 0) { empty.classList.add('visible'); }
-  else { empty.classList.remove('visible'); }
+  empty.textContent = 'No se encontraron registros con los filtros aplicados.';
+  if (data.length === 0) { empty.classList.add('visible'); return; }
+  empty.classList.remove('visible');
 
   data.forEach(img => {
     const tr = document.createElement('tr');
     const isUrl = img.ruta && (img.ruta.startsWith('http://') || img.ruta.startsWith('https://'));
     const rutaHtml = isUrl
       ? `<a class="action-btn" href="${img.ruta}" target="_blank"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 2H2a1 1 0 00-1 1v6a1 1 0 001 1h6a1 1 0 001-1V6.5M7 1h3m0 0v3m0-3L5 6" stroke-linecap="round" stroke-linejoin="round"/></svg>Abrir</a>`
-      : `<span style="font-family:var(--mono);font-size:11px;color:var(--text3);max-width:160px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${img.ruta}">${img.ruta||'—'}</span>`;
-
+      : `<span style="font-family:var(--mono);font-size:11px;color:var(--text3);max-width:160px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${img.ruta||''}">${img.ruta||'—'}</span>`;
     tr.innerHTML = `
       <td class="name-cell">
         <span class="fname">${img.nombre}</span>
         ${img.desc ? `<span class="fdesc">${img.desc}</span>` : ''}
       </td>
-      <td>${img.proyecto}</td>
+      <td>${img.proyecto||'—'}</td>
       <td style="color:var(--text3);font-size:12px;">${img.sector||'—'}</td>
-      <td><span class="type-tag ${typeClass[img.tipo]||'otro'}">${img.tipo}</span></td>
+      <td><span class="type-tag ${typeClass[img.tipo]||'otro'}">${img.tipo||'—'}</span></td>
       <td style="font-family:var(--mono);font-size:11px;color:var(--text3);">${formatDate(img.fecha)}</td>
-      <td><span class="badge ${estadoClass[img.estado]||'pendiente'}">${estadoLabel[img.estado]||img.estado}</span></td>
-      <td>${rutaHtml}</td>
-      <td>
-        <div style="display:flex;gap:5px;">
-          <button class="action-btn" onclick="editImage(${img.id})">
-            <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 1.5l2 2L3 10H1V8L7.5 1.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="action-btn" onclick="deleteImage(${img.id})" style="color:var(--red);border-color:rgba(255,90,90,0.2);">
-            <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h7M4 3V2h3v1M4.5 5v3.5M6.5 5v3.5M3 3l.5 6h4l.5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-      </td>`;
+      <td><span class="badge ${estadoClass[img.estado]||'pendiente'}">${img.estado||'—'}</span></td>
+      <td>${rutaHtml}</td>`;
     tbody.appendChild(tr);
   });
-  updateStats();
-  document.getElementById('toolbar-label').textContent = `${data.length} imagen${data.length!==1?'es':''} registrada${data.length!==1?'s':''}`;
+  document.getElementById('toolbar-label').textContent = `${data.length} registro${data.length!==1?'s':''} encontrado${data.length!==1?'s':''}`;
 }
 
 function formatDate(d) {
   if (!d) return '—';
-  const [y,m,day] = d.split('-');
-  return `${day}/${m}/${y}`;
+  const parts = d.split('-');
+  if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return d;
 }
 
 function applyFilters() {
@@ -781,67 +742,6 @@ function updateStats() {
   document.getElementById('stat-proc').textContent = images.filter(i=>i.estado==='En proceso').length;
 }
 
-function openModal(id) {
-  editId = id || null;
-  const modal = document.getElementById('modal-overlay');
-  document.getElementById('modal-title-text').textContent = id ? 'Editar imagen' : 'Nueva imagen';
-  if (id) {
-    const img = images.find(i=>i.id===id);
-    document.getElementById('f-nombre').value = img.nombre;
-    document.getElementById('f-proy').value = img.proyecto;
-    document.getElementById('f-sector').value = img.sector||'';
-    document.getElementById('f-tipo-modal').value = img.tipo;
-    document.getElementById('f-estado-modal').value = img.estado;
-    document.getElementById('f-ruta').value = img.ruta||'';
-    document.getElementById('f-desc').value = img.desc||'';
-  } else {
-    ['f-nombre','f-sector','f-ruta','f-desc'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('f-proy').value = '';
-    document.getElementById('f-tipo-modal').value = '';
-    document.getElementById('f-estado-modal').value = 'Disponible';
-  }
-  modal.classList.add('open');
-}
-
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
-function closeOnOverlay(e) { if (e.target.id === 'modal-overlay') closeModal(); }
-
-function editImage(id) { openModal(id); }
-
-function deleteImage(id) {
-  if (!confirm('¿Eliminar esta imagen del catálogo?')) return;
-  images = images.filter(i=>i.id!==id);
-  applyFilters();
-  showToast('Imagen eliminada');
-}
-
-function saveImage() {
-  const nombre = document.getElementById('f-nombre').value.trim();
-  const proyecto = document.getElementById('f-proy').value;
-  const tipo = document.getElementById('f-tipo-modal').value;
-  if (!nombre || !proyecto || !tipo) { alert('Completa los campos obligatorios (*)'); return; }
-  const data = {
-    nombre, proyecto,
-    sector: document.getElementById('f-sector').value.trim()||'—',
-    tipo,
-    estado: document.getElementById('f-estado-modal').value,
-    ruta: document.getElementById('f-ruta').value.trim(),
-    desc: document.getElementById('f-desc').value.trim(),
-    fecha: new Date().toISOString().slice(0,10),
-  };
-  if (editId) {
-    const idx = images.findIndex(i=>i.id===editId);
-    images[idx] = { ...images[idx], ...data };
-    showToast('Imagen actualizada');
-  } else {
-    data.id = Date.now();
-    images.unshift(data);
-    showToast('Imagen agregada al catálogo');
-  }
-  closeModal();
-  applyFilters();
-}
-
 function exportCSV() {
   const headers = ['Nombre','Proyecto','Sector','Tipo','Fecha','Estado','Ruta','Descripción'];
   const rows = images.map(i=>[i.nombre,i.proyecto,i.sector,i.tipo,i.fecha,i.estado,i.ruta,i.desc].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
@@ -849,7 +749,7 @@ function exportCSV() {
   const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `catalogo_imagenes_hidroclic_${new Date().toISOString().slice(0,10)}.csv`;
+  a.download = `catalogo_hidroclic_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
   showToast('CSV exportado');
 }
@@ -861,7 +761,11 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('show'), 2800);
 }
 
-applyFilters();
+const style = document.createElement('style');
+style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
+document.head.appendChild(style);
+
+loadFromSheets();
 </script>
 </body>
 </html>
