@@ -837,51 +837,84 @@ loadFromSheets();
 }
 .mascot-bubble {
   background: var(--surface);
-  border: 1px solid var(--border2);
+  border: 1px solid #c5dcd5;
   border-radius: 14px 14px 4px 14px;
   padding: 14px 16px;
   font-family: var(--sans);
   font-size: 12px;
   color: var(--text);
-  max-width: 260px;
+  width: 272px;
   line-height: 1.5;
-  box-shadow: 0 4px 16px rgba(15,78,56,0.12);
+  box-shadow: 0 4px 16px rgba(15,78,56,0.10);
   animation: bubbleIn .4s ease;
   position: relative;
 }
-.mascot-bubble strong { color: var(--accent); display: block; margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-.mascot-form { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.mascot-bubble .clicito-tag {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 4px;
+}
+.mascot-bubble .clicito-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  display: block;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+.mascot-bubble .clicito-sub {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+.mascot-form { display: flex; flex-direction: column; gap: 7px; }
+.mascot-form-field { display: flex; flex-direction: column; gap: 2px; }
+.mascot-form-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+.mascot-form-row { display: flex; gap: 6px; }
+.mascot-form-row .mascot-form-field { flex: 1; }
 .mascot-form input, .mascot-form textarea {
   font-family: var(--sans);
   font-size: 11px;
-  padding: 5px 8px;
+  padding: 6px 9px;
   border: 1px solid var(--border2);
-  border-radius: 6px;
+  border-radius: 7px;
   background: var(--bg);
   color: var(--text);
   outline: none;
   resize: none;
   transition: border-color .2s;
+  width: 100%;
 }
 .mascot-form input:focus, .mascot-form textarea:focus { border-color: var(--accent); }
-.mascot-form textarea { height: 52px; }
+.mascot-form textarea { height: 58px; }
 .mascot-form-btn {
   background: var(--accent);
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 6px 10px;
+  border-radius: 8px;
+  padding: 9px 12px;
   font-family: var(--sans);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
   display: block;
+  margin-top: 2px;
   transition: opacity .2s;
 }
 .mascot-form-btn:hover { opacity: 0.85; }
-.mascot-form-msg { font-size: 10px; color: var(--text3); margin-top: 2px; text-align: center; }
+.mascot-form-msg { font-size: 10px; color: var(--text3); margin-top: 3px; text-align: center; }
 .mascot-bubble .bubble-close {
   position: absolute;
   top: 6px; right: 8px;
@@ -939,13 +972,30 @@ loadFromSheets();
 <div class="mascot-wrap" id="mascot-wrap">
   <div class="mascot-bubble" id="mascot-bubble">
     <button class="bubble-close" onclick="closeBubble()">×</button>
-    <strong>¿Necesitas un archivo?</strong>
+    <span class="clicito-tag">👷 Clicito dice:</span>
+    <span class="clicito-title">¿Necesitas que elabore<br>algo para ti? 🛠️</span>
+    <p class="clicito-sub">Dime qué necesitas y cuándo — yo me encargo. Solo dame los datos y listo. 📋</p>
     <div class="mascot-form">
-      <input type="text" id="mf-nombre" placeholder="Tu nombre" maxlength="60">
-      <input type="text" id="mf-archivo" placeholder="Imagen o archivo que necesitas" maxlength="80">
-      <textarea id="mf-desc" placeholder="Descripción / uso"></textarea>
-      <a class="mascot-form-btn" id="mf-btn" href="#">Enviar solicitud</a>
-      <p class="mascot-form-msg">Se abrirá tu correo con los datos listos.</p>
+      <div class="mascot-form-field">
+        <span class="mascot-form-label">Proyecto</span>
+        <input type="text" id="mf-proyecto" placeholder="Ej. Drenaje Tumbes D-02">
+      </div>
+      <div class="mascot-form-row">
+        <div class="mascot-form-field">
+          <span class="mascot-form-label">¿Qué necesitas?</span>
+          <input type="text" id="mf-archivo" placeholder="Nombre o descripción">
+        </div>
+        <div class="mascot-form-field" style="max-width:88px;">
+          <span class="mascot-form-label">Fecha límite</span>
+          <input type="date" id="mf-fecha">
+        </div>
+      </div>
+      <div class="mascot-form-field">
+        <span class="mascot-form-label">Detalles y ruta en SharePoint</span>
+        <textarea id="mf-desc" placeholder="Descríbelo con detalle + ruta en SharePoint donde están los insumos 🗂️"></textarea>
+      </div>
+      <a class="mascot-form-btn" id="mf-btn" href="#">¡Solicitar a Clicito! 🚀</a>
+      <p class="mascot-form-msg">Se abrirá tu correo con todo listo para enviar.</p>
     </div>
   </div>
   <div class="mascot-img-wrap" onclick="toggleBubble()">
@@ -969,21 +1019,25 @@ setTimeout(() => {
 
 document.getElementById('mf-btn').addEventListener('click', function(e) {
   e.preventDefault();
-  const nombre  = document.getElementById('mf-nombre').value.trim();
-  const archivo = document.getElementById('mf-archivo').value.trim();
-  const desc    = document.getElementById('mf-desc').value.trim();
-  if (!nombre || !archivo) {
-    alert('Por favor completa tu nombre y el archivo que necesitas.');
+  const proyecto = document.getElementById('mf-proyecto').value.trim();
+  const archivo  = document.getElementById('mf-archivo').value.trim();
+  const fecha    = document.getElementById('mf-fecha').value;
+  const desc     = document.getElementById('mf-desc').value.trim();
+  if (!proyecto || !archivo) {
+    alert('Por favor completa el proyecto y lo que necesitas.');
     return;
   }
   const to      = 'soporte@iahidroclic.com';
-  const subject = encodeURIComponent('Solicitud de archivo – Catálogo Hidroclic');
-  const body    = encodeURIComponent(
-    'Hola,\n\n' +
-    'Solicitante: ' + nombre + '\n' +
-    'Archivo solicitado: ' + archivo + '\n' +
-    (desc ? 'Descripción / uso: ' + desc + '\n' : '') +
-    '\nGracias.'
+  const subject = encodeURIComponent('Solicitud de elaboración – ' + proyecto);
+  const fechaStr = fecha ? new Date(fecha + 'T12:00:00').toLocaleDateString('es-PE', {day:'2-digit', month:'long', year:'numeric'}) : 'No especificada';
+  const body = encodeURIComponent(
+    'Hola 👷,\n\n' +
+    'Te hago llegar la siguiente solicitud de elaboración:\n\n' +
+    '📁 Proyecto: ' + proyecto + '\n' +
+    '🛠️ ¿Qué necesito?: ' + archivo + '\n' +
+    '📅 Fecha límite: ' + fechaStr + '\n' +
+    (desc ? '📋 Detalles y ruta en SharePoint:\n' + desc + '\n' : '') +
+    '\nGracias!'
   );
   window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
 });
